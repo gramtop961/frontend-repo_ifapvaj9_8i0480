@@ -1,28 +1,44 @@
-import { useState } from 'react'
+import React, { useRef } from 'react'
+import { LanguageProvider } from './components/LanguageProvider'
+import Header from './components/Header'
+import Hero from './components/Hero'
+import Activities from './components/Activities'
+import Hotels from './components/Hotels'
+import Flights from './components/Flights'
+import Transport from './components/Transport'
+import Restaurants from './components/Restaurants'
+import Planner from './components/Planner'
+import Footer from './components/Footer'
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  const activitiesRef = useRef(null)
+  const planRef = useRef(null)
+
+  const scrollTo = (ref) => {
+    if (ref?.current) ref.current.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white text-gray-900">
+      <Header onPlan={() => scrollTo(planRef)} />
+      <main>
+        <Hero onExplore={() => scrollTo(activitiesRef)} onPlan={() => scrollTo(planRef)} />
+        <div ref={activitiesRef}><Activities /></div>
+        <Hotels />
+        <Flights />
+        <Transport />
+        <Restaurants />
+        <div ref={planRef}><Planner /></div>
+      </main>
+      <Footer />
     </div>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  )
+}
